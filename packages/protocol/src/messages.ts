@@ -48,7 +48,6 @@ export type ClientMessage = z.infer<typeof clientMessageSchema>;
 export type ProtocolRejection =
   | 'invalid-message'
   | 'unknown-game'
-  | 'game-full'
   | 'not-in-a-game'
   | 'unknown-token'
   | 'spectators-cannot-play'
@@ -78,7 +77,6 @@ const REJECTION_MESSAGES: Record<RejectionReason, string> = {
   ko: 'Ko: you cannot take that stone back straight away. Play elsewhere first.',
   'invalid-message': 'The server did not understand that request.',
   'unknown-game': 'No game with that code. It may have ended or the server restarted.',
-  'game-full': 'That game already has two players.',
   'not-in-a-game': 'You are not in a game.',
   'unknown-token': 'That seat is no longer available.',
   'spectators-cannot-play': 'You are watching this game, not playing it.',
