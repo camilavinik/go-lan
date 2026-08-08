@@ -1,0 +1,29 @@
+{
+  "name": "go-lan",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Self-hosted app to play Go on your local network",
+  "license": "MIT",
+  "workspaces": [
+    "packages/rules",
+    "packages/protocol",
+    "packages/server",
+    "packages/web"
+  ],
+  "scripts": {
+    "build:libs": "npm run build -w @go-lan/rules && npm run build -w @go-lan/protocol",
+    "build": "npm run build:libs && npm run build -w @go-lan/server && npm run build -w @go-lan/web",
+    "dev": "npm run build:libs && concurrently -n libs,server,web -c blue,green,magenta \"npm run dev -w @go-lan/rules\" \"npm run dev -w @go-lan/server\" \"npm run dev -w @go-lan/web\"",
+    "start": "node packages/server/dist/index.js",
+    "test": "npm run build:libs && npm run test -w @go-lan/rules && npm run test -w @go-lan/server",
+    "typecheck": "npm run build:libs && tsc -b --pretty"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

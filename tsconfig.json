@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/rules" },
+    { "path": "./packages/protocol" },
+    { "path": "./packages/server" }
+  ]
+}
