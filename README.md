@@ -35,6 +35,12 @@ find that address with:
 ipconfig getifaddr en0
 ```
 
+If something else already owns port 8080, pick another one:
+
+```bash
+GO_LAN_PORT=8090 docker compose up -d
+```
+
 ## Development
 
 Requires Node 22 or newer.
@@ -53,6 +59,14 @@ Other useful commands:
 npm test         # run the rules engine and server test suites
 npm run build    # build every package
 npm run typecheck
+```
+
+To try things out without a second person, `scripts/opponent-bot.mjs` creates a
+game, prints its code and plays the first empty point every turn. It passes when
+you pass, which is how you reach the marking phase on your own.
+
+```bash
+node scripts/opponent-bot.mjs
 ```
 
 ## How it is put together
