@@ -11,6 +11,7 @@ const PORT = Number(process.env.PORT ?? 8080);
 const HOST = process.env.HOST ?? '0.0.0.0';
 const SWEEP_INTERVAL_MS = 5 * 60 * 1000;
 const HEARTBEAT_INTERVAL_MS = 30 * 1000;
+const SHUTDOWN_GRACE_MS = 5000;
 
 const webDist = process.env.WEB_DIST ?? fileURLToPath(new URL('../../web/dist', import.meta.url));
 
@@ -46,7 +47,13 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.once(signal, () => {
     clearInterval(sweeper);
     clearInterval(heartbeat);
+
+    // Open game connections would otherwise keep the HTTP server from closing,
+    // so a container with a player in it would hang until Docker gave up on it.
+    for (const socket of websockets.clients) socket.terminate();
     websockets.close();
+
+    setTimeout(() => process.exit(0), SHUTDOWN_GRACE_MS).unref();
     void app.close().then(() => process.exit(0));
   });
 }
