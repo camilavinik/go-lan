@@ -2,7 +2,7 @@ import { GAME_CODE_LENGTH } from '@go-lan/protocol';
 import type { BoardSize } from '@go-lan/rules';
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RulesDrawer } from '../components/RulesDrawer.js';
+import { RulesDrawer } from '../components/Rules.js';
 import { requestNewGame } from '../lib/createGame.js';
 import { loadNick, saveNick } from '../lib/session.js';
 

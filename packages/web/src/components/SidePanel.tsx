@@ -2,7 +2,7 @@ import type { GameSnapshot } from '@go-lan/protocol';
 import type { Color, GameResult } from '@go-lan/rules';
 import { useState } from 'react';
 import type { ConnectionStatus } from '../hooks/useGameSocket.js';
-import { RulesDrawer } from './RulesDrawer.js';
+import { RulesSummary } from './Rules.js';
 
 export type SidePanelProps = {
   snapshot: GameSnapshot;
@@ -92,25 +92,6 @@ export function SidePanel(props: SidePanelProps) {
         shareOrigin={props.shareOrigin}
       />
     </aside>
-  );
-}
-
-/**
- * Enough of the rules to get through a move without leaving the board, with the
- * rest a click away. Worth the space when neither player has played before.
- */
-function RulesSummary() {
-  return (
-    <div className="rules-card">
-      <p className="rules-card__label">The short version</p>
-      <ul className="rules-card__list">
-        <li>Stones go on the crossings and never move again.</li>
-        <li>Fill the last empty point next to a group and you capture it.</li>
-        <li>Two passes in a row end the game.</li>
-        <li>Your stones plus the space they surround win it. White starts 7.5 up.</li>
-      </ul>
-      <RulesDrawer label="The full rules" />
-    </div>
   );
 }
 

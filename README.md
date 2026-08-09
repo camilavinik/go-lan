@@ -14,7 +14,8 @@ There are no accounts, no sign up and nothing leaves your network.
 - Beginner friendly. Illegal moves are refused with the reason why, the last move
   is highlighted and captures are counted for you.
 - The short version of the rules next to the board while you play, and the whole
-  thing, written for someone who has never played, one click away.
+  thing, written for someone who has never played, one click away. In English or
+  Spanish, whichever you pick.
 - Take back a move if your opponent agrees.
 - Anyone else with the code joins as a spectator.
 - Reconnect after a refresh and keep your seat.

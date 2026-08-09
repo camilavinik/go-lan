@@ -475,6 +475,13 @@ input:focus-visible {
   background: rgba(255, 255, 255, 0.02);
 }
 
+.rules-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .rules-card__label {
   margin: 0;
   font-size: 0.7rem;
@@ -498,6 +505,29 @@ input:focus-visible {
 .rules-card__list::marker,
 .rules-card__list li::marker {
   color: var(--accent);
+}
+
+.lang-toggle {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.lang-toggle__option {
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.lang-toggle__option.is-on {
+  background: var(--accent);
+  color: #0d1117;
 }
 
 /* Rules drawer */
@@ -577,6 +607,12 @@ input:focus-visible {
   padding: 1.25rem 1.5rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+}
+
+.rules-drawer__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .rules-drawer__body {
