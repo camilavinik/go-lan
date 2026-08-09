@@ -72,7 +72,7 @@ export function HomePage() {
           value={nick}
           onChange={(event) => setNick(event.target.value)}
           maxLength={20}
-          placeholder="Camila"
+          placeholder="Nickname"
           autoComplete="nickname"
         />
       </label>

@@ -15,22 +15,22 @@ function registryWithClock() {
 describe('creating and joining', () => {
   it('gives the creator the colour they asked for', () => {
     const registry = new RoomRegistry();
-    const white = registry.create({ nick: 'Camila', boardSize: 9, color: 'white' });
+    const white = registry.create({ nick: 'Nickname', boardSize: 9, color: 'white' });
 
     expect(white.color).toBe('white');
-    expect(white.room.seats.white?.nick).toBe('Camila');
+    expect(white.room.seats.white?.nick).toBe('Nickname');
     expect(white.room.seats.black).toBeNull();
   });
 
   it('gives the code six unambiguous characters', () => {
     const registry = new RoomRegistry();
-    const { room } = registry.create({ nick: 'Camila', boardSize: 19 });
+    const { room } = registry.create({ nick: 'Nickname', boardSize: 19 });
     expect(room.code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
   });
 
   it('seats the second player in the free chair', () => {
     const registry = new RoomRegistry();
-    const created = registry.create({ nick: 'Camila', boardSize: 9, color: 'black' });
+    const created = registry.create({ nick: 'Nickname', boardSize: 9, color: 'black' });
     const joined = registry.join(created.room.code, 'Ana');
 
     expect(joined.ok && joined.value.color).toBe('white');
@@ -38,7 +38,7 @@ describe('creating and joining', () => {
 
   it('accepts the code in lower case, because people type it that way', () => {
     const registry = new RoomRegistry();
-    const created = registry.create({ nick: 'Camila', boardSize: 9 });
+    const created = registry.create({ nick: 'Nickname', boardSize: 9 });
     const joined = registry.join(created.room.code.toLowerCase(), 'Ana');
 
     expect(joined.ok).toBe(true);
@@ -46,7 +46,7 @@ describe('creating and joining', () => {
 
   it('turns a third arrival into a spectator', () => {
     const registry = new RoomRegistry();
-    const created = registry.create({ nick: 'Camila', boardSize: 9 });
+    const created = registry.create({ nick: 'Nickname', boardSize: 9 });
     registry.join(created.room.code, 'Ana');
     const watcher = registry.join(created.room.code, 'Sofia');
 
@@ -63,7 +63,7 @@ describe('creating and joining', () => {
 describe('reconnecting', () => {
   it('returns a player to their seat with their token', () => {
     const registry = new RoomRegistry();
-    const created = registry.create({ nick: 'Camila', boardSize: 9, color: 'black' });
+    const created = registry.create({ nick: 'Nickname', boardSize: 9, color: 'black' });
 
     const back = registry.rejoin(created.room.code, created.token);
     expect(back.ok && back.value.color).toBe('black');
@@ -71,7 +71,7 @@ describe('reconnecting', () => {
 
   it('refuses a token from another game', () => {
     const registry = new RoomRegistry();
-    const created = registry.create({ nick: 'Camila', boardSize: 9 });
+    const created = registry.create({ nick: 'Nickname', boardSize: 9 });
 
     const back = registry.rejoin(created.room.code, 'not-a-real-token');
     expect(back.ok === false && back.reason).toBe('unknown-token');
@@ -81,7 +81,7 @@ describe('reconnecting', () => {
 describe('taking back a move', () => {
   function gameInProgress() {
     const registry = new RoomRegistry();
-    const { room } = registry.create({ nick: 'Camila', boardSize: 9, color: 'black' });
+    const { room } = registry.create({ nick: 'Nickname', boardSize: 9, color: 'black' });
     registry.join(room.code, 'Ana');
     registry.move(room, 'black', { type: 'play', point: { x: 2, y: 2 } });
     registry.move(room, 'white', { type: 'play', point: { x: 6, y: 6 } });
@@ -126,7 +126,7 @@ describe('taking back a move', () => {
 
   it('has nothing to take back on an empty board', () => {
     const registry = new RoomRegistry();
-    const { room } = registry.create({ nick: 'Camila', boardSize: 9 });
+    const { room } = registry.create({ nick: 'Nickname', boardSize: 9 });
 
     const request = registry.requestUndo(room, 'black');
     expect(request.ok === false && request.reason).toBe('nothing-to-undo');
@@ -136,7 +136,7 @@ describe('taking back a move', () => {
 describe('clearing idle games', () => {
   it('removes a game nobody has been connected to for an hour', () => {
     const { registry, advance } = registryWithClock();
-    registry.create({ nick: 'Camila', boardSize: 9 });
+    registry.create({ nick: 'Nickname', boardSize: 9 });
 
     advance(ROOM_IDLE_TIMEOUT_MS + 1);
     expect(registry.sweep()).toBe(1);
@@ -145,7 +145,7 @@ describe('clearing idle games', () => {
 
   it('keeps a game that still has somebody connected', () => {
     const { registry, advance } = registryWithClock();
-    const { room, color } = registry.create({ nick: 'Camila', boardSize: 9 });
+    const { room, color } = registry.create({ nick: 'Nickname', boardSize: 9 });
     registry.attach(room, color);
 
     advance(ROOM_IDLE_TIMEOUT_MS + 1);
@@ -154,7 +154,7 @@ describe('clearing idle games', () => {
 
   it('keeps a game that was active recently', () => {
     const { registry, advance } = registryWithClock();
-    registry.create({ nick: 'Camila', boardSize: 9 });
+    registry.create({ nick: 'Nickname', boardSize: 9 });
 
     advance(ROOM_IDLE_TIMEOUT_MS - 1);
     expect(registry.sweep()).toBe(0);
@@ -164,7 +164,7 @@ describe('clearing idle games', () => {
 describe('presence', () => {
   it('reports a player as away once their last tab closes', () => {
     const registry = new RoomRegistry();
-    const { room, color } = registry.create({ nick: 'Camila', boardSize: 9 });
+    const { room, color } = registry.create({ nick: 'Nickname', boardSize: 9 });
 
     registry.attach(room, color);
     expect(registry.snapshot(room).players.black?.connected).toBe(true);
@@ -175,7 +175,7 @@ describe('presence', () => {
 
   it('counts spectators', () => {
     const registry = new RoomRegistry();
-    const { room } = registry.create({ nick: 'Camila', boardSize: 9 });
+    const { room } = registry.create({ nick: 'Nickname', boardSize: 9 });
 
     registry.attach(room, null);
     registry.attach(room, null);

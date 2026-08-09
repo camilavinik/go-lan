@@ -3,25 +3,27 @@
 A self-hosted app for playing Go (baduk, weiqi) with someone else on your local network.
 
 One of you creates a game and gets a six character code. The other types the code in and you play.
-There are no accounts, no sign up and nothing leaves your network.
 
 ## Features
 
 - Real time two player games over WebSocket, on a 9x9, 13x13 or 19x19 board.
 - Full rules: captures, ko, suicide, passing and resignation.
 - Proper end of game: after two passes you agree which stones are dead, then the
-  server counts the board with area scoring.
-- Beginner friendly. Illegal moves are refused with the reason why, the last move
-  is highlighted and captures are counted for you.
-- The short version of the rules next to the board while you play, and the whole
-  thing, written for someone who has never played, one click away. In English or
-  Spanish, whichever you pick.
+  server counts the board with area scoring and 7.5 komi.
+- Beginner friendly. An illegal move is refused in red with the reason why, and
+  the message clears as soon as the game moves on. The last move is highlighted
+  and captures are counted for you.
+- The short version of the rules sits next to the board while you play, and the
+  whole thing, written for someone who has never played, is one click away. In
+  English or Spanish: it follows your browser the first time and remembers what
+  you pick after that.
 - Take back a move if your opponent agrees.
 - Anyone else with the code joins as a spectator.
 - Reconnect after a refresh and keep your seat.
 - An invite link that works from other machines, whichever address you opened.
 
-Games live in memory only. Restarting the server clears them.
+No clocks, no handicap stones, no ratings. Games live in memory only, so
+restarting the server clears them.
 
 ## Running it
 
@@ -53,6 +55,21 @@ you are browsing through `localhost`.
 One caveat: `npm run play` leaves a healthy container alone, so it will not pick
 up code changes. Run `npm run stop` first, or use the development setup below.
 
+## Who can reach it, and what is stored
+
+The server listens on every interface, which is the entire point: your opponent
+has to be able to reach it. It also means anyone on the same network who has the
+six character code can open the game, and take a seat if one is still free. That
+is reasonable for a home or an office, but it is not a login system, so do not
+forward the port to the internet.
+
+Nothing is written down. There is no database and no game log; rooms sit in
+memory, and are dropped when the server stops or after a while with nobody
+connected. Your name and your seat token live in your own browser's local
+storage and only ever travel to your own server. The token is what lets you
+reload the page and get your seat back, and it is only ever sent to the
+connection that owns it, never to your opponent or to spectators.
+
 ## Development
 
 Requires Node 22 or newer.
@@ -81,6 +98,13 @@ you pass, which is how you reach the marking phase on your own.
 node scripts/opponent-bot.mjs
 ```
 
+It talks to port 8080 by default. Point it at a container started by
+`npm run play`, which may have landed on another port, with `GO_LAN_URL`:
+
+```bash
+GO_LAN_URL=ws://localhost:8081/ws node scripts/opponent-bot.mjs
+```
+
 ## How it is put together
 
 ```
@@ -99,12 +123,14 @@ The design document lives in [docs/superpowers/specs](docs/superpowers/specs).
 
 ## New to Go?
 
-The board starts empty. Black plays first, and players alternate placing a stone
-on any empty intersection. A group of stones with no adjacent empty points is
-captured and removed. The game ends when both players pass, and whoever surrounds
-more of the board wins. White receives 7.5 points of compensation, called komi,
-for moving second.
+You do not need to read anything before starting. Every screen has a button that
+opens the rules in full, written for someone who has never played, and during a
+game the four lines that matter most stay next to the board.
 
-That is enough to start. The app will stop you from making an illegal move and
-tell you why, so the fastest way to learn is to play a 9x9 game and see what
-happens.
+The very short version: black plays first, you take turns placing a stone on any
+empty crossing, and a group with no empty crossings left beside it is captured
+and removed. The game ends when both players pass, and whoever ends up with more
+stones and surrounded space wins. White gets 7.5 points for moving second.
+
+The app refuses illegal moves and tells you which rule you ran into, so the
+fastest way to learn is to start a 9x9 game and see what happens.

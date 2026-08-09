@@ -92,7 +92,7 @@ function NamePrompt({ code, onSubmit }: { code: string; onSubmit: (nick: string)
             value={value}
             onChange={(event) => setValue(event.target.value)}
             maxLength={20}
-            placeholder="Camila"
+            placeholder="Nickname"
             autoFocus
           />
         </label>

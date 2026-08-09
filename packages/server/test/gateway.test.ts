@@ -49,7 +49,7 @@ function connect(): FakeSocket {
   return socket;
 }
 
-function hostAGame(nick = 'Camila'): { socket: FakeSocket; code: string } {
+function hostAGame(nick = 'Nickname'): { socket: FakeSocket; code: string } {
   const socket = connect();
   socket.say({ type: 'create', nick, boardSize: 9, color: 'black' });
   return { socket, code: socket.lastOfType('welcome').snapshot.code };
@@ -63,12 +63,12 @@ beforeEach(() => {
 describe('joining a game', () => {
   it('tells the client where the server can be reached from, for invite links', () => {
     const registry = new RoomRegistry();
-    const withAddress = new Gateway(registry, 'http://192.168.1.127:8090');
+      const withAddress = new Gateway(registry, 'http://192.168.0.10:8090');
     const socket = new FakeSocket();
     withAddress.handleConnection(socket as unknown as WebSocket);
-    socket.say({ type: 'create', nick: 'Camila', boardSize: 9 });
+    socket.say({ type: 'create', nick: 'Nickname', boardSize: 9 });
 
-    expect(socket.lastOfType('welcome').shareOrigin).toBe('http://192.168.1.127:8090');
+    expect(socket.lastOfType('welcome').shareOrigin).toBe('http://192.168.0.10:8090');
   });
 
   it('reports no address when the server could not work one out', () => {
@@ -82,7 +82,7 @@ describe('joining a game', () => {
 
     expect(welcome.color).toBe('black');
     expect(welcome.token).toBeTruthy();
-    expect(welcome.snapshot.players.black?.nick).toBe('Camila');
+    expect(welcome.snapshot.players.black?.nick).toBe('Nickname');
   });
 
   it('seats the guest and tells the host about it', () => {
