@@ -65,6 +65,11 @@ button:disabled {
   background: var(--danger);
 }
 
+.button--done {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -451,10 +456,31 @@ input:focus-visible {
 }
 
 .share__link {
-  margin: 0;
-  font-size: 0.75rem;
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.2);
   color: var(--muted);
-  word-break: break-all;
+  font-family: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.share__link:focus {
+  outline: none;
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.share__feedback {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--danger);
+}
+
+.share__feedback:empty {
+  display: none;
 }
 
 .share__spectators {

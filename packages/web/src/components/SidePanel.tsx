@@ -1,7 +1,8 @@
 import type { GameSnapshot } from '@go-lan/protocol';
 import type { Color, GameResult } from '@go-lan/rules';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ConnectionStatus } from '../hooks/useGameSocket.js';
+import { copyText } from '../lib/clipboard.js';
 import { RulesSummary } from './Rules.js';
 
 export type SidePanelProps = {
@@ -239,7 +240,8 @@ function ShareBox({
   spectators: number;
   shareOrigin: string | null;
 }) {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const linkRef = useRef<HTMLInputElement>(null);
 
   // A link to localhost points at whichever machine opens it, so when the page
   // was loaded that way we use the address the server reports instead.
@@ -248,19 +250,42 @@ function ShareBox({
   const link = `${origin}/g/${code}`;
 
   async function copy() {
-    await navigator.clipboard.writeText(link);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+    const done = await copyText(link);
+    setCopyState(done ? 'copied' : 'failed');
+
+    // Nothing was copied, so leave the link selected and the browser's own copy
+    // shortcut will finish the job.
+    if (!done) linkRef.current?.select();
+
+    window.setTimeout(() => setCopyState('idle'), 1000);
   }
 
   return (
     <div className="share">
       <p className="share__label">Invite someone</p>
       <p className="share__code">{code}</p>
-      <button type="button" className="button--quiet" onClick={copy}>
-        {copied ? 'Link copied' : 'Copy link'}
+      <button
+        type="button"
+        className={`button--quiet ${copyState === 'copied' ? 'button--done' : ''}`}
+        onClick={copy}
+      >
+        {copyState === 'copied' ? 'Link copied' : 'Copy link'}
       </button>
-      <p className="share__link">{link}</p>
+      {/* A field rather than a line of text: served over plain http the
+          clipboard API does not exist at all, so copying by hand has to stay
+          within reach. One click selects the whole thing. */}
+      <input
+        ref={linkRef}
+        className="share__link"
+        value={link}
+        readOnly
+        aria-label="Invite link"
+        onFocus={(event) => event.currentTarget.select()}
+        onClick={(event) => event.currentTarget.select()}
+      />
+      <p className="share__feedback" role="status">
+        {copyState === 'failed' && 'Could not reach the clipboard. Copy the selected link.'}
+      </p>
       {spectators > 0 && (
         <p className="share__spectators">
           {spectators} {spectators === 1 ? 'person is' : 'people are'} watching
