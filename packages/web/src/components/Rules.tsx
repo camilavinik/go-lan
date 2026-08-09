@@ -136,7 +136,7 @@ const COPY: Record<RulesLanguage, Copy> = {
     close: 'Close',
     short: [
       'Stones go on the crossings and never move again.',
-      'Fill the last empty point next to a group and you capture it.',
+      'You capture an enemy group by filling every empty crossing around it.',
       'Two passes in a row end the game.',
       'Your stones plus the space they surround win it. White starts 7.5 up.',
     ],
@@ -215,7 +215,7 @@ const COPY: Record<RulesLanguage, Copy> = {
     close: 'Cerrar',
     short: [
       'Las piedras van en los cruces y no se mueven nunca más.',
-      'Si ocupás el último punto libre de un grupo, lo capturás.',
+      'Capturás un grupo rival cuando ocupás todos los cruces vacíos que lo rodean.',
       'Dos pases seguidos terminan la partida.',
       'Ganás por tus piedras más el espacio que rodean. Blancas arrancan 7.5 arriba.',
     ],
