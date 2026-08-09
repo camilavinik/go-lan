@@ -16,30 +16,39 @@ There are no accounts, no sign up and nothing leaves your network.
 - Take back a move if your opponent agrees.
 - Anyone else with the code joins as a spectator.
 - Reconnect after a refresh and keep your seat.
+- An invite link that works from other machines, whichever address you opened.
 
 Games live in memory only. Restarting the server clears them.
 
 ## Running it
 
-With Docker, which is the intended way:
-
 ```bash
-docker compose up -d
+npm run play
 ```
 
-Then open `http://localhost:8080` on the machine running it, and
-`http://<its-lan-ip>:8080` from any other machine in the house. On macOS you can
-find that address with:
+That is the whole thing. It builds the image if needed, picks a free port,
+starts the container, waits for it to answer and opens your browser on the
+address the rest of the network can use. Running it again when it is already up
+does nothing except open the browser, so a game in progress survives.
 
 ```bash
-ipconfig getifaddr en0
+npm run stop
 ```
 
-If something else already owns port 8080, pick another one:
+It needs Docker running, and nothing else. If you would rather drive Docker
+yourself:
 
 ```bash
 GO_LAN_PORT=8090 docker compose up -d
 ```
+
+Started that way, invite links fall back to whatever address your browser used,
+because a container cannot see the host's address on the network. `npm run play`
+works it out and passes it in, which is why the invite link is right even when
+you are browsing through `localhost`.
+
+One caveat: `npm run play` leaves a healthy container alone, so it will not pick
+up code changes. Run `npm run stop` first, or use the development setup below.
 
 ## Development
 

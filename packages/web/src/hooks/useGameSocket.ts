@@ -12,6 +12,8 @@ type State = {
   status: ConnectionStatus;
   snapshot: GameSnapshot | null;
   myColor: Color | null;
+  /** The address to build invite links from, as reported by the server. */
+  shareOrigin: string | null;
   /** A refused action, shown until the player does something else. */
   notice: string | null;
   /** Set when the game is gone for good, so retrying is pointless. */
@@ -29,6 +31,7 @@ const initialState: State = {
   status: 'connecting',
   snapshot: null,
   myColor: null,
+  shareOrigin: null,
   notice: null,
   fatal: null,
 };
@@ -52,6 +55,7 @@ function reduce(state: State, action: Action): State {
             status: 'open',
             snapshot: message.snapshot,
             myColor: message.color,
+            shareOrigin: message.shareOrigin,
             notice: null,
             fatal: null,
           };

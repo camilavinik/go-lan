@@ -425,6 +425,13 @@ input:focus-visible {
   letter-spacing: 0.22em;
 }
 
+.share__link {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+
 .share__spectators {
   margin: 0;
   font-size: 0.8rem;

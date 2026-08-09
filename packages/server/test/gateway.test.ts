@@ -61,6 +61,21 @@ beforeEach(() => {
 });
 
 describe('joining a game', () => {
+  it('tells the client where the server can be reached from, for invite links', () => {
+    const registry = new RoomRegistry();
+    const withAddress = new Gateway(registry, 'http://192.168.1.127:8090');
+    const socket = new FakeSocket();
+    withAddress.handleConnection(socket as unknown as WebSocket);
+    socket.say({ type: 'create', nick: 'Camila', boardSize: 9 });
+
+    expect(socket.lastOfType('welcome').shareOrigin).toBe('http://192.168.1.127:8090');
+  });
+
+  it('reports no address when the server could not work one out', () => {
+    const { socket } = hostAGame();
+    expect(socket.lastOfType('welcome').shareOrigin).toBeNull();
+  });
+
   it('welcomes the host as the colour they chose', () => {
     const { socket } = hostAGame();
     const welcome = socket.lastOfType('welcome');

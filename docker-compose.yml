@@ -6,4 +6,10 @@ services:
     # Override with GO_LAN_PORT if something else already owns 8080.
     ports:
       - '${GO_LAN_PORT:-8080}:8080'
+    environment:
+      # A container cannot see the host's address on the network, so whoever
+      # starts it has to say where it will be reachable from. `npm run play`
+      # fills this in; without it, invite links fall back to whatever address
+      # the browser used.
+      GO_LAN_PUBLIC_ORIGIN: '${GO_LAN_PUBLIC_ORIGIN:-}'
     restart: unless-stopped

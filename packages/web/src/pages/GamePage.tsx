@@ -15,7 +15,7 @@ export function GamePage() {
   // who we are. Without one, we need a name before we can join.
   const [nick, setNick] = useState<string | null>(() => loadNick() || null);
   const connection = useGameSocket(code, nick);
-  const { snapshot, myColor, status, notice, fatal, send, showNotice } = connection;
+  const { snapshot, myColor, status, shareOrigin, notice, fatal, send, showNotice } = connection;
 
   if (fatal) {
     return (
@@ -58,6 +58,7 @@ export function GamePage() {
         snapshot={snapshot}
         myColor={myColor}
         status={status}
+        shareOrigin={shareOrigin}
         notice={notice}
         onPass={() => send({ type: 'pass' })}
         onResign={() => send({ type: 'resign' })}

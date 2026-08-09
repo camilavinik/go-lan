@@ -63,6 +63,12 @@ export type ServerMessage =
       token: string;
       /** null when this connection is watching rather than playing. */
       color: Color | null;
+      /**
+       * Where the server can be reached from other machines, for the invite
+       * link. null when it could not work that out, in which case the client
+       * falls back to the address the page was loaded from.
+       */
+      shareOrigin: string | null;
       snapshot: GameSnapshot;
     }
   | { type: 'snapshot'; snapshot: GameSnapshot }

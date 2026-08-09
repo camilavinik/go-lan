@@ -17,7 +17,7 @@ const webDist = process.env.WEB_DIST ?? fileURLToPath(new URL('../../web/dist', 
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL ?? 'info' } });
 const registry = new RoomRegistry();
-const gateway = new Gateway(registry);
+const gateway = new Gateway(registry, shareOrigin());
 
 app.get('/healthz', async () => ({ status: 'ok', games: registry.size }));
 
@@ -56,6 +56,21 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
     setTimeout(() => process.exit(0), SHUTDOWN_GRACE_MS).unref();
     void app.close().then(() => process.exit(0));
   });
+}
+
+/**
+ * The address to put in invite links. Inside a container we only see the Docker
+ * bridge address, which is useless to anyone else, so there it has to be handed
+ * to us by whoever started the container.
+ */
+function shareOrigin(): string | null {
+  const configured = process.env.GO_LAN_PUBLIC_ORIGIN?.trim();
+  if (configured) return configured;
+
+  if (existsSync('/.dockerenv')) return null;
+
+  const [address] = localAddresses();
+  return address ? `http://${address}:${PORT}` : null;
 }
 
 /** The addresses other machines in the house can use. */

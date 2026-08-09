@@ -12,6 +12,8 @@
     "packages/web"
   ],
   "scripts": {
+    "play": "node scripts/play.mjs",
+    "stop": "docker compose down",
     "build:libs": "npm run build -w @go-lan/rules && npm run build -w @go-lan/protocol",
     "build": "npm run build:libs && npm run build -w @go-lan/server && npm run build -w @go-lan/web",
     "dev": "npm run build:libs && concurrently -n libs,server,web -c blue,green,magenta \"npm run dev -w @go-lan/rules\" \"npm run dev -w @go-lan/server\" \"npm run dev -w @go-lan/web\"",

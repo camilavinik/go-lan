@@ -7,6 +7,7 @@ export type SidePanelProps = {
   snapshot: GameSnapshot;
   myColor: Color | null;
   status: ConnectionStatus;
+  shareOrigin: string | null;
   notice: string | null;
   onPass: () => void;
   onResign: () => void;
@@ -78,7 +79,11 @@ export function SidePanel(props: SidePanelProps) {
         </div>
       )}
 
-      <ShareBox code={snapshot.code} spectators={snapshot.spectators} />
+      <ShareBox
+        code={snapshot.code}
+        spectators={snapshot.spectators}
+        shareOrigin={props.shareOrigin}
+      />
     </aside>
   );
 }
@@ -216,9 +221,24 @@ function ResignButton({ onResign }: { onResign: () => void }) {
   );
 }
 
-function ShareBox({ code, spectators }: { code: string; spectators: number }) {
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1', '[::1]']);
+
+function ShareBox({
+  code,
+  spectators,
+  shareOrigin,
+}: {
+  code: string;
+  spectators: number;
+  shareOrigin: string | null;
+}) {
   const [copied, setCopied] = useState(false);
-  const link = `${window.location.origin}/g/${code}`;
+
+  // A link to localhost points at whichever machine opens it, so when the page
+  // was loaded that way we use the address the server reports instead.
+  const loopback = LOOPBACK_HOSTS.has(window.location.hostname);
+  const origin = loopback && shareOrigin ? shareOrigin : window.location.origin;
+  const link = `${origin}/g/${code}`;
 
   async function copy() {
     await navigator.clipboard.writeText(link);
@@ -233,6 +253,7 @@ function ShareBox({ code, spectators }: { code: string; spectators: number }) {
       <button type="button" className="button--quiet" onClick={copy}>
         {copied ? 'Link copied' : 'Copy link'}
       </button>
+      <p className="share__link">{link}</p>
       {spectators > 0 && (
         <p className="share__spectators">
           {spectators} {spectators === 1 ? 'person is' : 'people are'} watching

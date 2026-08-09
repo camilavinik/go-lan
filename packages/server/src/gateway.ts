@@ -25,11 +25,13 @@ type Alive = { isAlive?: boolean };
  */
 export class Gateway {
   readonly #registry: RoomRegistry;
+  readonly #shareOrigin: string | null;
   readonly #sessions = new Map<WebSocket, Session>();
   readonly #socketsByCode = new Map<string, Set<WebSocket>>();
 
-  constructor(registry: RoomRegistry) {
+  constructor(registry: RoomRegistry, shareOrigin: string | null = null) {
     this.#registry = registry;
+    this.#shareOrigin = shareOrigin;
   }
 
   handleConnection(socket: WebSocket): void {
@@ -181,6 +183,7 @@ export class Gateway {
       type: 'welcome',
       token,
       color,
+      shareOrigin: this.#shareOrigin,
       snapshot: this.#registry.snapshot(room),
     });
     this.#broadcast(room, socket);
