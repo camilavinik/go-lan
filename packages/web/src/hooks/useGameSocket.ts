@@ -59,8 +59,19 @@ function reduce(state: State, action: Action): State {
             notice: null,
             fatal: null,
           };
-        case 'snapshot':
-          return { ...state, snapshot: message.snapshot };
+        case 'snapshot': {
+          // A refusal is about the move you just tried, so it stops being
+          // relevant as soon as the game moves on.
+          const advanced =
+            state.snapshot !== null &&
+            (state.snapshot.moveCount !== message.snapshot.moveCount ||
+              state.snapshot.phase !== message.snapshot.phase);
+          return {
+            ...state,
+            snapshot: message.snapshot,
+            notice: advanced ? null : state.notice,
+          };
+        }
         case 'rejected':
           return message.reason === 'unknown-game'
             ? { ...state, fatal: message.message }

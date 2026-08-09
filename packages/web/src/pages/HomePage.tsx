@@ -2,6 +2,7 @@ import { GAME_CODE_LENGTH } from '@go-lan/protocol';
 import type { BoardSize } from '@go-lan/rules';
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RulesDrawer } from '../components/RulesDrawer.js';
 import { requestNewGame } from '../lib/createGame.js';
 import { loadNick, saveNick } from '../lib/session.js';
 
@@ -58,8 +59,11 @@ export function HomePage() {
   return (
     <main className="home">
       <header className="home__header">
-        <h1>go-lan</h1>
-        <p>Play Go with someone else on this network.</p>
+        <div>
+          <h1>go-lan</h1>
+          <p>Play Go with someone else on this network.</p>
+        </div>
+        <RulesDrawer />
       </header>
 
       <label className="field">

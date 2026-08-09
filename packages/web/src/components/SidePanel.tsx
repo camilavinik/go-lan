@@ -2,6 +2,7 @@ import type { GameSnapshot } from '@go-lan/protocol';
 import type { Color, GameResult } from '@go-lan/rules';
 import { useState } from 'react';
 import type { ConnectionStatus } from '../hooks/useGameSocket.js';
+import { RulesDrawer } from './RulesDrawer.js';
 
 export type SidePanelProps = {
   snapshot: GameSnapshot;
@@ -24,13 +25,19 @@ export function SidePanel(props: SidePanelProps) {
 
   return (
     <aside className="panel">
+      <RulesDrawer />
+
       <Players snapshot={snapshot} myColor={myColor} />
 
       <p className="panel__status">{statusLine(snapshot, myColor)}</p>
 
-      {notice && <p className="panel__notice">{notice}</p>}
+      {notice && (
+        <p className="panel__error" role="alert">
+          {notice}
+        </p>
+      )}
       {status !== 'open' && (
-        <p className="panel__notice">
+        <p className="panel__connection">
           {status === 'connecting' ? 'Connecting...' : 'Connection lost, retrying...'}
         </p>
       )}
