@@ -25,8 +25,6 @@ export function SidePanel(props: SidePanelProps) {
 
   return (
     <aside className="panel">
-      <RulesDrawer />
-
       <Players snapshot={snapshot} myColor={myColor} />
 
       <p className="panel__status">{statusLine(snapshot, myColor)}</p>
@@ -86,12 +84,33 @@ export function SidePanel(props: SidePanelProps) {
         </div>
       )}
 
+      <RulesSummary />
+
       <ShareBox
         code={snapshot.code}
         spectators={snapshot.spectators}
         shareOrigin={props.shareOrigin}
       />
     </aside>
+  );
+}
+
+/**
+ * Enough of the rules to get through a move without leaving the board, with the
+ * rest a click away. Worth the space when neither player has played before.
+ */
+function RulesSummary() {
+  return (
+    <div className="rules-card">
+      <p className="rules-card__label">The short version</p>
+      <ul className="rules-card__list">
+        <li>Stones go on the crossings and never move again.</li>
+        <li>Fill the last empty point next to a group and you capture it.</li>
+        <li>Two passes in a row end the game.</li>
+        <li>Your stones plus the space they surround win it. White starts 7.5 up.</li>
+      </ul>
+      <RulesDrawer label="The full rules" />
+    </div>
   );
 }
 

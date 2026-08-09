@@ -13,8 +13,8 @@ There are no accounts, no sign up and nothing leaves your network.
   server counts the board with area scoring.
 - Beginner friendly. Illegal moves are refused with the reason why, the last move
   is highlighted and captures are counted for you.
-- The rules, written for someone who has never played, one click away on every
-  screen.
+- The short version of the rules next to the board while you play, and the whole
+  thing, written for someone who has never played, one click away.
 - Take back a move if your opponent agrees.
 - Anyone else with the code joins as a spectator.
 - Reconnect after a refresh and keep your seat.

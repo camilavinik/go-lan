@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
  * because they are too long to sit next to the board, but one click away
  * because you will want them during your first few games.
  */
-export function RulesDrawer() {
+export function RulesDrawer({ label = 'How to play' }: { label?: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function RulesDrawer() {
         <span className="rules-trigger__icon" aria-hidden="true">
           ?
         </span>
-        How to play
+        {label}
       </button>
 
       {open && (
